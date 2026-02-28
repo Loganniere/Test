@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}{% if impianto %}Modifica{% else %}Nuovo{% endif %} Impianto — Auto Solari{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <div class="card shadow-sm">
+      <div class="card-header bg-warning bg-opacity-25">
+        <h4 class="mb-0">
+          <i class="bi bi-sun-fill text-warning"></i>
+          {% if impianto %}Modifica impianto{% else %}Nuovo impianto{% endif %}
+        </h4>
+      </div>
+      <div class="card-body">
+        <form method="post">
+          <div class="mb-3">
+            <label class="form-label">Tipo impianto</label>
+            <select name="tipo" class="form-select" required>
+              <option value="fotovoltaico" {% if impianto and impianto.tipo == 'fotovoltaico' %}selected{% endif %}>Fotovoltaico</option>
+              <option value="eolico" {% if impianto and impianto.tipo == 'eolico' %}selected{% endif %}>Eolico</option>
+              <option value="cogenerazione" {% if impianto and impianto.tipo == 'cogenerazione' %}selected{% endif %}>Cogenerazione</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Potenza installata (kW)</label>
+            <input type="number" name="kw_installati" class="form-control" step="0.01" min="0" required
+                   value="{{ impianto.kw_installati if impianto else '' }}">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Data di installazione</label>
+            <input type="date" name="data_installazione" class="form-control" required
+                   value="{{ impianto.data_installazione if impianto else '' }}">
+          </div>
+          <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-success">
+              <i class="bi bi-check-lg"></i> Salva
+            </button>
+            <a href="{{ url_for('impianti') }}" class="btn btn-outline-secondary">Annulla</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

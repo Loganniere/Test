@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Produzioni — Auto Solari{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h2><i class="bi bi-lightning-fill text-warning"></i> Le mie produzioni</h2>
+  <a href="{{ url_for('nuova_produzione') }}" class="btn btn-success">
+    <i class="bi bi-plus-lg"></i> Nuova produzione
+  </a>
+</div>
+
+{% if produzioni %}
+<div class="card shadow-sm">
+  <div class="card-body p-0">
+    <table class="table table-hover mb-0">
+      <thead class="table-light">
+        <tr>
+          <th>Data</th>
+          <th>Impianto</th>
+          <th>Potenza installata</th>
+          <th>kW prodotti</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for p in produzioni %}
+        <tr>
+          <td>{{ p.data }}</td>
+          <td>{{ p.i_tipo|capitalize }}</td>
+          <td>{{ p.kw_installati }} kW</td>
+          <td>{{ "%.2f"|format(p.kw_prodotti) }} kW</td>
+          <td>
+            <form method="post" action="{{ url_for('elimina_produzione', p_id=p.id) }}"
+                  onsubmit="return confirm('Eliminare questa produzione?')">
+              <button class="btn btn-sm btn-outline-danger">
+                <i class="bi bi-trash"></i>
+              </button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% else %}
+<div class="text-center py-5 text-muted">
+  <i class="bi bi-lightning fs-1"></i>
+  <p class="mt-2">Nessuna produzione registrata. <a href="{{ url_for('nuova_produzione') }}">Aggiungine una</a>.</p>
+</div>
+{% endif %}
+{% endblock %}

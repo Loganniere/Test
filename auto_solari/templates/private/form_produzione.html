@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Nuova Produzione — Auto Solari{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <div class="card shadow-sm">
+      <div class="card-header bg-warning bg-opacity-10">
+        <h4 class="mb-0">
+          <i class="bi bi-lightning-fill text-warning"></i> Registra produzione
+        </h4>
+      </div>
+      <div class="card-body">
+        {% if not impianti %}
+        <div class="alert alert-warning">
+          Devi prima <a href="{{ url_for('nuovo_impianto') }}">aggiungere un impianto</a> per registrare una produzione.
+        </div>
+        {% else %}
+        <form method="post">
+          <div class="mb-3">
+            <label class="form-label">Impianto</label>
+            <select name="impianto_id" class="form-select" required>
+              {% for i in impianti %}
+              <option value="{{ i.id }}">{{ i.tipo|capitalize }} — {{ i.kw_installati }} kW</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label">Data inizio</label>
+              <input type="date" name="data_inizio" class="form-control" required value="{{ today }}">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Data fine <small class="text-muted">(opz. per range)</small></label>
+              <input type="date" name="data_fine" class="form-control" value="{{ today }}">
+            </div>
+          </div>
+          <div class="mb-3 mt-3">
+            <label class="form-label">kW prodotti totali</label>
+            <input type="number" name="kw_prodotti" class="form-control" step="0.01" min="0" required>
+            <div class="form-text">Se inserisci un range di date, il valore verrà distribuito ugualmente.</div>
+          </div>
+          <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-success">
+              <i class="bi bi-check-lg"></i> Salva
+            </button>
+            <a href="{{ url_for('produzioni') }}" class="btn btn-outline-secondary">Annulla</a>
+          </div>
+        </form>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

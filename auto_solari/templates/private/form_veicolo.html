@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}{% if veicolo %}Modifica{% else %}Nuovo{% endif %} Veicolo — Auto Solari{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <div class="card shadow-sm">
+      <div class="card-header bg-primary bg-opacity-10">
+        <h4 class="mb-0">
+          <i class="bi bi-ev-front-fill text-primary"></i>
+          {% if veicolo %}Modifica veicolo{% else %}Nuovo veicolo{% endif %}
+        </h4>
+      </div>
+      <div class="card-body">
+        <form method="post">
+          <div class="mb-3">
+            <label class="form-label">Tipo veicolo</label>
+            <select name="tipo" class="form-select" required>
+              <option value="auto" {% if veicolo and veicolo.tipo == 'auto' %}selected{% endif %}>Auto</option>
+              <option value="moto" {% if veicolo and veicolo.tipo == 'moto' %}selected{% endif %}>Moto</option>
+              <option value="scooter" {% if veicolo and veicolo.tipo == 'scooter' %}selected{% endif %}>Scooter</option>
+              <option value="bicicletta" {% if veicolo and veicolo.tipo == 'bicicletta' %}selected{% endif %}>Bicicletta elettrica</option>
+            </select>
+          </div>
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label">Marca</label>
+              <input type="text" name="marca" class="form-control"
+                     value="{{ veicolo.marca if veicolo else '' }}">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Modello</label>
+              <input type="text" name="modello" class="form-control"
+                     value="{{ veicolo.modello if veicolo else '' }}">
+            </div>
+          </div>
+          <div class="mb-3 mt-3">
+            <label class="form-label">Capacità batteria (kWh)</label>
+            <input type="number" name="capacita_batteria" class="form-control" step="0.1" min="0" required
+                   value="{{ veicolo.capacita_batteria if veicolo else '' }}">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">km totali percorsi</label>
+            <input type="number" name="km_totali" class="form-control" step="0.1" min="0"
+                   value="{{ veicolo.km_totali if veicolo else 0 }}">
+          </div>
+          <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-success">
+              <i class="bi bi-check-lg"></i> Salva
+            </button>
+            <a href="{{ url_for('veicoli') }}" class="btn btn-outline-secondary">Annulla</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
