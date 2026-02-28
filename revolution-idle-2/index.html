@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Revolution Idle 2</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="game-container">
+        <!-- Header -->
+        <header id="header">
+            <h1>Revolution Idle 2</h1>
+            <div id="prestige-bar">
+                <span id="prestige-level">Era: Ancient</span>
+                <button id="prestige-btn" class="btn-prestige" disabled>Advance Era (Need <span id="prestige-cost">1000</span> Influence)</button>
+            </div>
+        </header>
+
+        <!-- Main Resources -->
+        <div id="resources-panel">
+            <div class="resource" id="res-followers">
+                <span class="res-icon">&#9760;</span>
+                <div class="res-info">
+                    <span class="res-name">Followers</span>
+                    <span class="res-value" id="followers-count">0</span>
+                    <span class="res-rate" id="followers-rate">+0/s</span>
+                </div>
+            </div>
+            <div class="resource" id="res-influence">
+                <span class="res-icon">&#9733;</span>
+                <div class="res-info">
+                    <span class="res-name">Influence</span>
+                    <span class="res-value" id="influence-count">0</span>
+                    <span class="res-rate" id="influence-rate">+0/s</span>
+                </div>
+            </div>
+            <div class="resource" id="res-gold">
+                <span class="res-icon">&#9672;</span>
+                <div class="res-info">
+                    <span class="res-name">Gold</span>
+                    <span class="res-value" id="gold-count">0</span>
+                    <span class="res-rate" id="gold-rate">+0/s</span>
+                </div>
+            </div>
+            <div class="resource" id="res-knowledge">
+                <span class="res-icon">&#9830;</span>
+                <div class="res-info">
+                    <span class="res-name">Knowledge</span>
+                    <span class="res-value" id="knowledge-count">0</span>
+                    <span class="res-rate" id="knowledge-rate">+0/s</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <nav id="tabs">
+            <button class="tab active" data-tab="actions">Actions</button>
+            <button class="tab" data-tab="upgrades">Upgrades</button>
+            <button class="tab" data-tab="buildings">Buildings</button>
+            <button class="tab" data-tab="research">Research</button>
+            <button class="tab" data-tab="achievements">Achievements</button>
+            <button class="tab" data-tab="stats">Stats</button>
+        </nav>
+
+        <!-- Tab Content -->
+        <main id="tab-content">
+            <!-- Actions Tab -->
+            <div class="tab-panel active" id="panel-actions">
+                <div class="action-grid">
+                    <button class="action-btn" id="btn-recruit" onclick="game.recruit()">
+                        <span class="action-icon">&#9760;</span>
+                        <span class="action-name">Recruit Follower</span>
+                        <span class="action-desc">Click to gain a follower</span>
+                    </button>
+                    <button class="action-btn" id="btn-speech" onclick="game.giveSpeech()">
+                        <span class="action-icon">&#9733;</span>
+                        <span class="action-name">Give Speech</span>
+                        <span class="action-desc">Gain influence (costs 5 followers)</span>
+                    </button>
+                    <button class="action-btn" id="btn-trade" onclick="game.trade()">
+                        <span class="action-icon">&#9672;</span>
+                        <span class="action-name">Trade</span>
+                        <span class="action-desc">Gain gold (costs 10 influence)</span>
+                    </button>
+                    <button class="action-btn" id="btn-study" onclick="game.study()">
+                        <span class="action-icon">&#9830;</span>
+                        <span class="action-name">Study</span>
+                        <span class="action-desc">Gain knowledge (costs 20 gold)</span>
+                    </button>
+                </div>
+                <div id="click-particles"></div>
+            </div>
+
+            <!-- Upgrades Tab -->
+            <div class="tab-panel" id="panel-upgrades">
+                <div id="upgrades-list" class="card-list"></div>
+            </div>
+
+            <!-- Buildings Tab -->
+            <div class="tab-panel" id="panel-buildings">
+                <div id="buildings-list" class="card-list"></div>
+            </div>
+
+            <!-- Research Tab -->
+            <div class="tab-panel" id="panel-research">
+                <div id="research-list" class="card-list"></div>
+            </div>
+
+            <!-- Achievements Tab -->
+            <div class="tab-panel" id="panel-achievements">
+                <div id="achievements-list" class="card-list"></div>
+            </div>
+
+            <!-- Stats Tab -->
+            <div class="tab-panel" id="panel-stats">
+                <div id="stats-content" class="stats-panel"></div>
+            </div>
+        </main>
+
+        <!-- Log -->
+        <div id="log-panel">
+            <div id="log-messages"></div>
+        </div>
+
+        <!-- Save Controls -->
+        <div id="save-controls">
+            <button class="btn-save" onclick="game.save()">Save</button>
+            <button class="btn-save" onclick="game.load()">Load</button>
+            <button class="btn-save btn-danger" onclick="game.hardReset()">Reset</button>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
