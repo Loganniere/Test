@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}Ricerca Pubblica — Auto Solari{% endblock %}
+{% block content %}
+<h2 class="mb-4"><i class="bi bi-search text-success"></i> Ricerca pubblica</h2>
+
+<div class="card shadow-sm mb-4">
+  <div class="card-body">
+    <form method="get" class="row g-3">
+      <div class="col-md-5">
+        <input type="text" name="q" class="form-control" placeholder="Cerca per comune, distretto, tipo..."
+               value="{{ query }}">
+      </div>
+      <div class="col-md-4">
+        <select name="tipo" class="form-select">
+          <option value="utenti" {% if tipo == 'utenti' %}selected{% endif %}>Utenti per area</option>
+          <option value="impianti" {% if tipo == 'impianti' %}selected{% endif %}>Impianti</option>
+          <option value="veicoli" {% if tipo == 'veicoli' %}selected{% endif %}>Veicoli</option>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <button type="submit" class="btn btn-success w-100">
+          <i class="bi bi-search"></i> Cerca
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+{% if query %}
+  {% if results %}
+  <div class="card shadow-sm">
+    <div class="card-header">
+      <strong>{{ results|length }}</strong> risultati per "<em>{{ query }}</em>" ({{ tipo }})
+    </div>
+    <div class="card-body p-0">
+      <table class="table table-hover mb-0">
+        <thead class="table-light">
+          {% if tipo == 'utenti' %}
+          <tr><th>Comune</th><th>Distretto</th><th>Utenti registrati</th></tr>
+          {% elif tipo == 'impianti' %}
+          <tr><th>Tipo</th><th>Potenza (kW)</th><th>Comune</th><th>Distretto</th></tr>
+          {% elif tipo == 'veicoli' %}
+          <tr><th>Tipo</th><th>Marca</th><th>Modello</th><th>Comune</th><th>Distretto</th></tr>
+          {% endif %}
+        </thead>
+        <tbody>
+          {% for r in results %}
+          <tr>
+            {% if tipo == 'utenti' %}
+            <td>{{ r.comune }}</td><td>{{ r.distretto }}</td><td>{{ r.totale }}</td>
+            {% elif tipo == 'impianti' %}
+            <td>{{ r.tipo|capitalize }}</td><td>{{ r.kw_installati }}</td>
+            <td>{{ r.comune }}</td><td>{{ r.distretto }}</td>
+            {% elif tipo == 'veicoli' %}
+            <td>{{ r.tipo|capitalize }}</td><td>{{ r.marca or '—' }}</td>
+            <td>{{ r.modello or '—' }}</td><td>{{ r.comune }}</td><td>{{ r.distretto }}</td>
+            {% endif %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  {% else %}
+  <div class="alert alert-info">
+    Nessun risultato trovato per "<strong>{{ query }}</strong>".
+  </div>
+  {% endif %}
+{% endif %}
+{% endblock %}
