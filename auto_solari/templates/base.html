@@ -25,11 +25,13 @@
             <i class="bi bi-search"></i> Ricerca
           </a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{{ url_for('statistiche_pubbliche') }}">
-            <i class="bi bi-bar-chart-fill"></i> Statistiche
-          </a>
-        </li>
+        {% if user and user.is_admin %}
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('statistiche_pubbliche') }}">
+              <i class="bi bi-bar-chart-fill"></i> Statistiche globali
+            </a>
+          </li>
+        {% endif %}
         {% if user %}
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">

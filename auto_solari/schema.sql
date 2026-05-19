@@ -5,8 +5,11 @@ CREATE TABLE IF NOT EXISTS users (
     email TEXT UNIQUE NOT NULL,
     password_hash TEXT NOT NULL,
     via TEXT,
+    data_nascita DATE NOT NULL,
+    sesso TEXT NOT NULL CHECK(sesso IN ('M', 'F', 'Altro')),
     comune TEXT NOT NULL,
     distretto TEXT NOT NULL,
+    is_admin INTEGER NOT NULL DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
