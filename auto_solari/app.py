@@ -1,7 +1,6 @@
-import json
 import os
 import sqlite3
-from datetime import date, timedelta, datetime
+from datetime import date, timedelta
 from functools import wraps
 
 from flask import (Flask, flash, g, redirect, render_template, request,
@@ -63,6 +62,27 @@ def current_user():
     return db.execute("SELECT * FROM users WHERE id = ?", (session["user_id"],)).fetchone()
 
 
+def validate_within_range(db, table_name, user_id, field_name, new_value):
+    last = db.execute(
+        f"SELECT {field_name} FROM {table_name} WHERE user_id = ? ORDER BY id DESC LIMIT 1",
+        (user_id,),
+    ).fetchone()
+    if not last or last[0] is None:
+        return True, None
+
+    prev = float(last[0])
+    if prev == 0:
+        return True, None
+    min_allowed = prev * 0.7
+    max_allowed = prev * 1.3
+    if new_value < min_allowed or new_value > max_allowed:
+        return False, (
+            f"Valore fuori range rispetto all'ultimo inserimento ({prev:.2f}). "
+            f"Range consentito: {min_allowed:.2f} - {max_allowed:.2f}."
+        )
+    return True, None
+
+
 # ---------------------------------------------------------------------------
 # Auth routes
 # ---------------------------------------------------------------------------
@@ -75,10 +95,12 @@ def register():
         email = request.form["email"].strip().lower()
         password = request.form["password"]
         via = request.form.get("via", "").strip()
+        data_nascita = request.form["data_nascita"]
+        sesso = request.form["sesso"]
         comune = request.form["comune"].strip()
         distretto = request.form["distretto"].strip()
 
-        if not all([nome, cognome, email, password, comune, distretto]):
+        if not all([nome, cognome, email, password, data_nascita, sesso, comune, distretto]):
             flash("Tutti i campi obbligatori devono essere compilati.", "danger")
             return render_template("auth/register.html")
 
@@ -88,9 +110,9 @@ def register():
             return render_template("auth/register.html")
 
         db.execute(
-            "INSERT INTO users (nome, cognome, email, password_hash, via, comune, distretto) "
-            "VALUES (?, ?, ?, ?, ?, ?, ?)",
-            (nome, cognome, email, generate_password_hash(password), via, comune, distretto),
+            "INSERT INTO users (nome, cognome, email, password_hash, via, data_nascita, sesso, comune, distretto) "
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            (nome, cognome, email, generate_password_hash(password), via, data_nascita, sesso, comune, distretto),
         )
         db.commit()
         flash("Registrazione completata! Puoi ora effettuare il login.", "success")
@@ -172,6 +194,11 @@ def ricerca_pubblica():
 
 @app.route("/public/statistiche")
 def statistiche_pubbliche():
+    user = current_user()
+    if not user or not user["is_admin"]:
+        flash("Le statistiche globali sono disponibili solo per amministratori.", "warning")
+        return redirect(url_for("index"))
+
     db = get_db()
     periodo = request.args.get("periodo", "mese")
     raggruppa = request.args.get("raggruppa", "comune")
@@ -425,6 +452,12 @@ def nuova_ricarica():
     if request.method == "POST":
         veicolo_id = int(request.form["veicolo_id"])
         kw = float(request.form["kw_erogati"])
+        is_valid, err = validate_within_range(db, "ricariche", uid, "kw_erogati", kw)
+        if not is_valid:
+            flash(err, "danger")
+            return render_template(
+                "private/form_ricarica.html", user=current_user(), veicoli=veicoli_list, today=date.today().isoformat()
+            )
         km = float(request.form.get("km_percorsi", 0))
         ora_inizio = request.form.get("ora_inizio") or None
         ora_fine = request.form.get("ora_fine") or None
@@ -455,49 +488,6 @@ def nuova_ricarica():
 
     return render_template(
         "private/form_ricarica.html", user=current_user(), veicoli=veicoli_list, today=date.today().isoformat()
-    )
-
-
-@app.route("/ricariche/importa-json", methods=["GET", "POST"])
-@login_required
-def importa_ricariche_json():
-    db = get_db()
-    uid = session["user_id"]
-    veicoli_list = db.execute("SELECT * FROM veicoli WHERE user_id = ?", (uid,)).fetchall()
-
-    if request.method == "POST":
-        raw = request.form.get("json_data", "")
-        try:
-            data = json.loads(raw)
-            if isinstance(data, dict):
-                data = [data]
-            count = 0
-            for item in data:
-                veicolo_id = int(item["veicolo_id"])
-                kw = float(item["kw_erogati"])
-                record_date = item.get("data", date.today().isoformat())
-                ora_inizio = item.get("ora_inizio")
-                ora_fine = item.get("ora_fine")
-                km = float(item.get("km_percorsi", 0))
-                db.execute(
-                    "INSERT INTO ricariche (veicolo_id, user_id, data, ora_inizio, ora_fine, kw_erogati, km_percorsi) "
-                    "VALUES (?, ?, ?, ?, ?, ?, ?)",
-                    (veicolo_id, uid, record_date, ora_inizio, ora_fine, kw, km),
-                )
-                count += 1
-            db.commit()
-            flash(f"Importati {count} record con successo.", "success")
-            return redirect(url_for("ricariche"))
-        except (json.JSONDecodeError, KeyError, ValueError) as e:
-            flash(f"Errore nel JSON: {e}", "danger")
-
-    example = json.dumps(
-        [{"veicolo_id": 1, "data": date.today().isoformat(), "ora_inizio": "08:00",
-          "ora_fine": "10:00", "kw_erogati": 15.5, "km_percorsi": 80}],
-        indent=2,
-    )
-    return render_template(
-        "private/importa_json.html", user=current_user(), veicoli=veicoli_list, example=example
     )
 
 
@@ -544,6 +534,15 @@ def nuova_produzione():
     if request.method == "POST":
         impianto_id = int(request.form["impianto_id"])
         kw = float(request.form["kw_prodotti"])
+        is_valid, err = validate_within_range(db, "produzioni", uid, "kw_prodotti", kw)
+        if not is_valid:
+            flash(err, "danger")
+            return render_template(
+                "private/form_produzione.html",
+                user=current_user(),
+                impianti=impianti_list,
+                today=date.today().isoformat(),
+            )
         data_inizio = request.form["data_inizio"]
         data_fine = request.form.get("data_fine") or data_inizio
 
