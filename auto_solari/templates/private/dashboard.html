@@ -1,14 +1,14 @@
 {% extends "base.html" %}
 {% block title %}Dashboard — Auto Solari{% endblock %}
 {% block content %}
-<h2 class="mb-4">
+<h2 class="mb-4 wire-title">
   <i class="bi bi-speedometer2 text-success"></i>
-  Benvenuto, {{ user.nome }} {{ user.cognome }}
+  Dashboard utente
 </h2>
 
 <div class="row g-4 mb-4">
   <div class="col-md-3">
-    <div class="card text-white bg-success shadow-sm">
+    <div class="card stats-grid-card">
       <div class="card-body">
         <div class="d-flex justify-content-between align-items-center">
           <div>
@@ -22,7 +22,7 @@
     </div>
   </div>
   <div class="col-md-3">
-    <div class="card text-white bg-primary shadow-sm">
+    <div class="card stats-grid-card">
       <div class="card-body">
         <div class="d-flex justify-content-between align-items-center">
           <div>
@@ -36,7 +36,7 @@
     </div>
   </div>
   <div class="col-md-3">
-    <div class="card text-white bg-danger shadow-sm">
+    <div class="card stats-grid-card">
       <div class="card-body">
         <div class="d-flex justify-content-between align-items-center">
           <div>
@@ -50,7 +50,7 @@
     </div>
   </div>
   <div class="col-md-3">
-    <div class="card text-white bg-warning shadow-sm">
+    <div class="card stats-grid-card">
       <div class="card-body">
         <div class="d-flex justify-content-between align-items-center">
           <div>

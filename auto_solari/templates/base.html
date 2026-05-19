@@ -10,7 +10,7 @@
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-success">
+<nav class="navbar navbar-expand-lg">
   <div class="container">
     <a class="navbar-brand fw-bold" href="{{ url_for('index') }}">
       <i class="bi bi-lightning-charge-fill"></i> Auto Solari
@@ -21,13 +21,13 @@
     <div class="collapse navbar-collapse" id="navMain">
       <ul class="navbar-nav me-auto">
         <li class="nav-item">
-          <a class="nav-link" href="{{ url_for('ricerca_pubblica') }}">
+          <a class="nav-link {% if request.endpoint == 'ricerca_pubblica' %}active{% endif %}" href="{{ url_for('ricerca_pubblica') }}">
             <i class="bi bi-search"></i> Ricerca
           </a>
         </li>
         {% if user and user.is_admin %}
           <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('statistiche_pubbliche') }}">
+            <a class="nav-link {% if request.endpoint == 'statistiche_pubbliche' %}active{% endif %}" href="{{ url_for('statistiche_pubbliche') }}">
               <i class="bi bi-bar-chart-fill"></i> Statistiche globali
             </a>
           </li>
@@ -57,7 +57,7 @@
             </span>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('logout') }}"><i class="bi bi-box-arrow-right"></i> Logout</a>
+            <a class="nav-link" href="{{ url_for('logout') }}"><i class="bi bi-box-arrow-right"></i> Esci</a>
           </li>
         {% else %}
           <li class="nav-item">
@@ -72,7 +72,7 @@
   </div>
 </nav>
 
-<div class="container my-4">
+<div class="container my-4 app-shell">
   {% with messages = get_flashed_messages(with_categories=true) %}
     {% for category, message in messages %}
       <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
