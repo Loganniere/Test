@@ -4,8 +4,12 @@
 <div class="row justify-content-center">
   <div class="col-md-5">
     <div class="card shadow-sm">
-      <div class="card-header bg-success text-white">
-        <h4 class="mb-0"><i class="bi bi-box-arrow-in-right"></i> Accedi</h4>
+      <div class="card-header">
+        <div class="d-flex gap-2 mb-2">
+          <span class="nav-link active">Accedi</span>
+          <a class="nav-link" href="{{ url_for('register') }}">Registrati</a>
+        </div>
+        <h4 class="mb-0 wire-title"><i class="bi bi-box-arrow-in-right"></i> Solar Mobility</h4>
       </div>
       <div class="card-body">
         <form method="post">

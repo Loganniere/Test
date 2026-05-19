@@ -1,21 +1,76 @@
 body {
-  background-color: #f8f9fa;
+  background-color: #ececec;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  font-family: "Trebuchet MS", "Segoe UI", sans-serif;
 }
 
 footer {
   margin-top: auto;
 }
 
+.app-shell {
+  border: 1px solid #1f1f1f;
+  background: #fff;
+  padding: 0.75rem;
+}
+
+.navbar {
+  background: #fff !important;
+  border: 1px solid #1f1f1f;
+  padding: 0.45rem 0.6rem;
+}
+
 .navbar-brand {
-  font-size: 1.4rem;
-  letter-spacing: 0.5px;
+  font-size: 1.15rem;
+  letter-spacing: 0.3px;
+  color: #111 !important;
+}
+
+.navbar .nav-link {
+  border: 1px solid #1f1f1f;
+  margin-right: 0.35rem;
+  padding: 0.2rem 0.65rem !important;
+  color: #111 !important;
+  background: #fff;
+}
+
+.navbar .nav-link.active,
+.navbar .nav-link:hover {
+  background: #dff3c2;
 }
 
 .card {
-  border-radius: 0.5rem;
+  border-radius: 0;
+  border: 1px solid #1f1f1f;
+  box-shadow: none !important;
+}
+
+.card-header {
+  background: #fff !important;
+  border-bottom: 1px solid #1f1f1f !important;
+}
+
+.btn {
+  border-radius: 0;
+}
+
+.btn-success,
+.btn-primary,
+.btn-warning,
+.btn-danger {
+  background: #fff;
+  color: #111;
+  border: 1px solid #1f1f1f;
+}
+
+.btn-success:hover,
+.btn-primary:hover,
+.btn-warning:hover,
+.btn-danger:hover {
+  background: #dff3c2;
+  color: #111;
 }
 
 .table th {
@@ -29,4 +84,12 @@ pre {
   font-size: 0.82rem;
   max-height: 200px;
   overflow-y: auto;
+}
+
+.wire-title {
+  font-family: "Comic Sans MS", "Trebuchet MS", cursive;
+}
+
+.stats-grid-card {
+  min-height: 110px;
 }
