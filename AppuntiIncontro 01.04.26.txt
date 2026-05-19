@@ -1,0 +1,42 @@
+Le statistiche globali possono essere visualizzate da tutti gli utenti oppure solo amministratori? 
+- Solo amministratore no statistiche pubbliche
+
+
+Quali dati personali devono venire salvati per l'utente (età,sesso,ecc...)? 
+- anagrafica + data nascita
+
+
+I dati inseriti manualmente dall'utente devono essere validati? 
+- Si, usare un range +/- 30% dell'inserimento precedente
+
+L'utente ha l'accesso di modifica sui propri dati? Se si, con un sistema di verifica da parte degli amministratori? 
+- si
+
+
+Quali statistiche vogliono venire calcolate?
+- Produzione, e consumo, raggruppato per area geografica
+
+
+Ogni quanto devono venire salvati i dati del database? (Backup) 
+- 1 giorno
+
+
+Infrastruttura cloud oppure on-premise?
+A nostra scelta
+
+----------------------
+Appunti
+Inserimento manuale del chilometraggio
+Aggiungere distinzione nei requisiti
+Mostrare statistiche consumo energia per ogni veicolo
+Dettagliare maggiormente i requisiti
+Amministratore interviene come un'utente normale
+Prestazione assolutamente non devono essere come l'app emotì
+Annullare creazione e modifica del file json
+Le API verranno date in seguito 
+Quando vengono inseriti i dati manuali devono essere validati
+Hosting che rispetti la LPD
+Esportazione report utente personale 
+Focus usabilità sull'inserimento - tutti i veicoli o impianti insieme
+Un'impianto produce quindi l'efficenza è sempre positiva 
+
